@@ -1,0 +1,17 @@
+steps:
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  args:
+  - gcloud
+  - functions
+  - deploy
+  - predict-image
+  - --region=southamerica-east1
+  - --entry-point
+  - predict
+  - --runtime
+  - python39
+  - --source=. 
+  - --trigger-http
+  - --memory=2048MB
+  - --allow-unauthenticated
+  - --security-level=secure-always
