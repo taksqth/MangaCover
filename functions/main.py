@@ -7,18 +7,26 @@ from fastai.vision.all import *
 def _get_learner():
     client = storage.Client()
     bucket = client.get_bucket("manga-classifier-model")
-    blob = bucket.blob("export.pkl")
+    blob = bucket.blob("export_multicat.pkl")
     blob.download_to_filename("/tmp/model.pkl")
     learner = load_learner("/tmp/model.pkl")
     return learner
 
 
-def _get_predictions(learner, image):
-    pred_class, pred_idx, probs = learner.predict(image)
+def _get_predictions(learner, image, thresh=0.5):
+    _, _, probs = learner.predict(image)
+    preds = list(zip(learner.dls.vocab, [prob.item() for prob in probs]))
+    preds = [(lab, prob) for lab, prob in preds if prob >= 0.5]
+    preds.sort(key=lambda x: x[1], reverse=True)
     return json.dumps(
         {
-            "pred": pred_class,
-            "prob": f"{probs[pred_idx]:.04f}",
+            "preds": [
+                {
+                    "label": label,
+                    "probability": prob,
+                }
+                for label, prob in preds
+            ]
         }
     )
 
