@@ -82,7 +82,20 @@ import pandas as pd
 from tqdm.auto import tqdm
 
 def get_covers_for_all_tags(num_mangas=20):
-    client = MangaDexClient("credentials.json")
+    """Returns a pandas DataFrame with covers image urls for each tag in the MangaDex database.
+
+    It may be possible for a manga to show up in the query for multiple different tags, so we
+    deduplicate those cases.
+
+    TODO: There seems to be an issue with the API where only one cover image is returned for each
+    manga. We need to investigate this further, so we do not run into the issue of having too much
+    data to handle unexpectedly if this behavior changes suddenly.
+    """
+    try:
+        client = MangaDexClient('credentials.json')
+    except FileNotFoundError as e:
+        e.strerror = "The current version expects a credentials.json file at cwd."
+        raise e
     tags = client.get_manga_tags()
     mangas = [
         manga

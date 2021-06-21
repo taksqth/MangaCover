@@ -141,6 +141,7 @@ checklink/cookies.txt
 
 # data folder contents
 data/*
+models/*
 
 # credentials
 credentials.json

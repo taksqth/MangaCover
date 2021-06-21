@@ -3,10 +3,14 @@
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
 index = {"MangaDexClient": "00_datasets.internals.mangadex.ipynb",
-         "get_covers_for_all_tags": "00_datasets.internals.mangadex.ipynb"}
+         "get_covers_for_all_tags": "00_datasets.internals.mangadex.ipynb",
+         "create_multiclass_tag_manga_dataset": "01_datasets.loaders.ipynb",
+         "get_mangacover_dataloaders": "01_datasets.loaders.ipynb",
+         "load_learner_and_predict": "02_models.ipynb"}
 
 modules = ["datasets/internals/MangaDex.py",
-           "datasets/loaders.py"]
+           "datasets/loaders.py",
+           "model.py"]
 
 doc_url = "https://taksqth.github.io/mangacover/"
 
