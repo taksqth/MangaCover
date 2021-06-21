@@ -1,9 +1,10 @@
 from google.cloud import storage
 from mangacover.model import load_learner_and_predict
 
-LEARNER_BUCKET = 'manga-classifier-model'
-LEARNER_BLOB = 'export_multicat.pkl'
-LEARNER_PATH = '/tmp/model.pkl'
+LEARNER_BUCKET = "manga-classifier-model"
+LEARNER_BLOB = "export_multicat.pkl"
+LEARNER_PATH = "/tmp/model.pkl"
+
 
 def _download_learner():
     client = storage.Client()
@@ -27,4 +28,4 @@ def predict(request):
     file = request.files["file"]
 
     _download_learner()
-    return (load_learner_and_predict(LEARNER_PATH, file), 200, headers)
+    return (load_learner_and_predict(LEARNER_PATH, file, thresh=0.75), 200, headers)

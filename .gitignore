@@ -142,6 +142,7 @@ checklink/cookies.txt
 # data folder contents
 data/*
 models/*
+functions/mangacover
 
 # credentials
 credentials.json

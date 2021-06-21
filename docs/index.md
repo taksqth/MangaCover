@@ -8,9 +8,6 @@ title: MangaCover
 This is a personal project for the [Fast.ai MOOC](https://course.fast.ai). The objective
 is to build an ML product that labels a manga from its cover image.
 
-The current iteration just classifies an image as being a cover from a fantasy setting
-manga or not. Feel free to check this page once in a while for updates.
-
 <form id="cover-form" method="post" enctype="multipart/form-data">
     <div>
         <label for="cover-upload">Choose images to upload (PNG, JPG)</label>

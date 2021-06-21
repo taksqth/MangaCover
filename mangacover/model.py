@@ -3,6 +3,7 @@
 __all__ = ['load_learner_and_predict']
 
 # Cell
+from fastai.vision.all import *
 import json
 
 def load_learner_and_predict(path, image_data, thresh=0.5):
