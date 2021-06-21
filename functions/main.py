@@ -1,34 +1,16 @@
-import json
 from google.cloud import storage
+from mangacover.model import load_learner_and_predict
 
-from fastai.vision.all import *
+LEARNER_BUCKET = "manga-classifier-model"
+LEARNER_BLOB = "export_multicat.pkl"
+LEARNER_PATH = "/tmp/model.pkl"
 
 
-def _get_learner():
+def _download_learner():
     client = storage.Client()
-    bucket = client.get_bucket("manga-classifier-model")
-    blob = bucket.blob("export_multicat.pkl")
-    blob.download_to_filename("/tmp/model.pkl")
-    learner = load_learner("/tmp/model.pkl")
-    return learner
-
-
-def _get_predictions(learner, image, thresh=0.5):
-    _, _, probs = learner.predict(image)
-    preds = list(zip(learner.dls.vocab, [prob.item() for prob in probs]))
-    preds = [(lab, prob) for lab, prob in preds if prob >= 0.5]
-    preds.sort(key=lambda x: x[1], reverse=True)
-    return json.dumps(
-        {
-            "preds": [
-                {
-                    "label": label,
-                    "probability": prob,
-                }
-                for label, prob in preds
-            ]
-        }
-    )
+    bucket = client.get_bucket(LEARNER_BUCKET)
+    blob = bucket.blob(LEARNER_BLOB)
+    blob.download_to_filename(LEARNER_PATH)
 
 
 def predict(request):
@@ -45,6 +27,5 @@ def predict(request):
     headers = {"Access-Control-Allow-Origin": "*"}
     file = request.files["file"]
 
-    learner = _get_learner()
-    image = PILImage.create(file)
-    return (_get_predictions(learner, image), 200, headers)
+    _download_learner()
+    return (load_learner_and_predict(LEARNER_PATH, file, thresh=0.75), 200, headers)
